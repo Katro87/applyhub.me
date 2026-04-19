@@ -1,0 +1,117 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Platform user (Seeker, Client, or Admin)",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "fullName": { "type": "string" },
+        "phone": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "client", "admin"] },
+        "skills": { "type": "array", "items": { "type": "string" } },
+        "interests": { "type": "array", "items": { "type": "string" } },
+        "applicationLimit": { "type": "number" },
+        "applicationsThisWeek": { "type": "number" },
+        "lastApplicationDate": { "type": "string", "format": "date-time" },
+        "subscriptionTier": { "type": "string", "enum": ["free", "trial", "monthly"] },
+        "subscriptionExpiresAt": { "type": "string", "format": "date-time" },
+        "jobCredits": { "type": "number" },
+        "bio": { "type": "string" },
+        "title": { "type": "string" },
+        "experienceYears": { "type": "number" },
+        "hourlyRate": { "type": "number" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Job": {
+      "title": "Job",
+      "description": "A job listing",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "company": { "type": "string" },
+        "description": { "type": "string" },
+        "requirements": { "type": "array", "items": { "type": "string" } },
+        "salaryRange": { "type": "string" },
+        "weeklyHours": { "type": "number" },
+        "duration": { "type": "string" },
+        "workType": { "type": "string", "enum": ["Remote", "On-site", "Hybrid"] },
+        "location": { "type": "string" },
+        "postedAt": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": "string", "format": "date-time" },
+        "isFeatured": { "type": "boolean" },
+        "clientUid": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "expired", "pending"] }
+      },
+      "required": ["title", "company", "postedAt", "expiresAt"]
+    },
+    "Application": {
+      "title": "Application",
+      "description": "A job application",
+      "type": "object",
+      "properties": {
+        "jobUid": { "type": "string" },
+        "userUid": { "type": "string" },
+        "coverLetter": { "type": "string" },
+        "expectedSalary": { "type": "number" },
+        "experience": { "type": "number" },
+        "availability": { "type": "number" },
+        "startDate": { "type": "string" },
+        "status": { "type": "string", "enum": ["Applied", "Under Review", "Shortlisted", "Rejected"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["jobUid", "userUid", "status", "createdAt"]
+    },
+    "Payment": {
+      "title": "Payment",
+      "description": "A payment request",
+      "type": "object",
+      "properties": {
+        "userUid": { "type": "string" },
+        "amount": { "type": "number" },
+        "currency": { "type": "string" },
+        "method": { "type": "string" },
+        "status": { "type": "string", "enum": ["Pending", "Approved", "Rejected"] },
+        "proofUrl": { "type": "string" },
+        "type": { "type": "string", "enum": ["subscription", "job_credits"] },
+        "planId": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userUid", "amount", "status", "timestamp"]
+    },
+    "PaymentMethod": {
+      "title": "PaymentMethod",
+      "description": "Configurable payment methods",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "instructions": { "type": "string" },
+        "address": { "type": "string" },
+        "region": { "type": "string" },
+        "isActive": { "type": "boolean" }
+      }
+    },
+    "Review": {
+      "title": "Review",
+      "description": "A job review",
+      "type": "object",
+      "properties": {
+        "jobUid": { "type": "string" },
+        "userUid": { "type": "string" },
+        "rating": { "type": "number" },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{userId}": { "schema": "User", "description": "User profiles" },
+    "/jobs/{jobId}": { "schema": "Job", "description": "Job listings" },
+    "/applications/{appId}": { "schema": "Application", "description": "Job applications" },
+    "/payments/{paymentId}": { "schema": "Payment", "description": "Payment requests" },
+    "/paymentMethods/{methodId}": { "schema": "PaymentMethod", "description": "Payment method configurations" },
+    "/reviews/{reviewId}": { "schema": "Review", "description": "Job reviews" }
+  }
+}

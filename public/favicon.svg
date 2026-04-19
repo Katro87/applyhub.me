@@ -1,0 +1,20 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="none" role="img" aria-label="ApplyHub favicon">
+  <defs>
+    <linearGradient id="b" x1="10" y1="10" x2="54" y2="54" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2563EB"/>
+      <stop offset="100%" stop-color="#0EA5E9"/>
+    </linearGradient>
+    <linearGradient id="g" x1="22" y1="18" x2="46" y2="50" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#22C55E"/>
+      <stop offset="100%" stop-color="#06B6D4"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="#ffffff"/>
+  <path d="M18 16h18l10 10v22a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4V20a4 4 0 0 1 4-4Z" fill="#F8FAFC" stroke="url(#b)" stroke-width="3"/>
+  <path d="M36 16v10h10" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M22 27h16M22 34h12" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M26 39l4 4 8-9" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M37 22c-6.2 0-11 4.8-11 10.7 0 7.4 11 17.8 11 17.8s11-10.4 11-17.8C48 26.8 43.2 22 37 22Z" fill="url(#g)"/>
+  <circle cx="37" cy="32" r="5.8" fill="#ffffff"/>
+  <path d="M34.5 32.2l1.9 1.9 4-4.5" stroke="#0F766E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

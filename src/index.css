@@ -1,0 +1,290 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  
+  --color-bg: #F8FAFC;
+  --color-sidebar: #FFFFFF;
+  --color-primary: #2563EB;
+  --color-primary-light: #EFF6FF;
+  --color-accent: #F59E0B;
+  --color-text-dark: #1E293B;
+  --color-text-muted: #64748B;
+  --color-border: #E2E8F0;
+  
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+:root {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --card-bg: #ffffff;
+  --button-bg: #ffffff;
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --hover-bg: #e2e8f0;
+  --hover-text: #0f172a;
+  --border-color: #e2e8f0;
+  --divider-line: #000000;
+}
+
+@layer base {
+  body {
+    @apply font-sans bg-bg text-text-dark antialiased;
+  }
+}
+
+.dark {
+  color-scheme: dark;
+  --color-bg: #0F172A;
+  --color-sidebar: #1E293B;
+  --color-text-dark: #F8FAFC;
+  --color-text-muted: #94A3B8;
+  --color-border: #334155;
+  --bg-primary: #0f172a;
+  --bg-secondary: #111827;
+  --card-bg: #1e293b;
+  --button-bg: #1e293b;
+  --text-primary: #ffffff;
+  --text-secondary: #94a3b8;
+  --hover-bg: #1f2937;
+  --hover-text: #ffffff;
+  --border-color: #334155;
+  --divider-line: #f8fafc;
+}
+
+/* Layout Patterns from Theme */
+.main-wrapper {
+  display: flex;
+  height: calc(100vh - 64px);
+  overflow: hidden;
+}
+
+.content-area {
+  flex: 1;
+  overflow-y: auto;
+  background-color: var(--bg-secondary);
+  padding: 20px;
+  padding-bottom: 96px;
+  margin-left: 260px; /* Default margin */
+}
+
+.dark .content-area {
+  background-color: var(--bg-secondary);
+}
+
+.sidebar {
+  width: 260px;
+  background-color: var(--card-bg);
+  border-right: 1px solid var(--border-color);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+  position: fixed;
+  top: 64px;
+  bottom: 0;
+  left: 0;
+  z-index: 40;
+}
+
+.sidebar-backdrop {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    display: flex;
+    width: min(84vw, 320px);
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    z-index: 60;
+  }
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+  .sidebar.collapsed {
+    width: min(84vw, 320px);
+    padding: 20px;
+    align-items: stretch;
+  }
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.38);
+    backdrop-filter: blur(2px);
+    z-index: 55;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  .sidebar-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .main-wrapper {
+    height: auto;
+    overflow: visible;
+  }
+  .content-area {
+    height: auto;
+    overflow: visible;
+    margin-left: 0;
+    padding-bottom: 104px;
+  }
+}
+
+.job-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .job-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.leadgateway-banner {
+  background: linear-gradient(90deg, #1E293B 0%, #334155 100%);
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-card);
+}
+
+@media (max-width: 640px) {
+  .leadgateway-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
+
+.job-card {
+  @apply bg-white dark:bg-sidebar border border-border rounded-xl p-4 flex flex-col gap-3 shadow-sm transition-all duration-200;
+}
+
+.job-card.featured {
+  @apply border-2 border-accent;
+}
+
+.job-card-v2 {
+  @apply bg-white dark:bg-sidebar border border-border dark:border-gray-700 rounded-3xl p-6 flex flex-col relative overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1;
+}
+
+.job-card-v2.featured {
+  @apply border-primary/30 bg-primary/2 dark:bg-primary/5 ring-1 ring-primary/10;
+}
+
+.job-card-v2::before {
+  content: '';
+  @apply absolute top-0 left-0 w-1 h-full bg-primary/10 transition-all duration-300;
+}
+
+.job-card-v2:hover::before {
+  @apply bg-primary w-1.5;
+}
+
+.sidebar.collapsed {
+  width: 80px;
+  padding: 24px 12px;
+  align-items: center;
+}
+
+.content-area.expanded {
+  margin-left: 80px;
+}
+
+.badge-featured {
+  @apply bg-accent text-black px-2.5 py-1 rounded font-extrabold text-[10px] uppercase tracking-wider;
+}
+
+.catbot-bubble {
+  @apply bg-white dark:bg-sidebar p-4 rounded-2xl rounded-br-none shadow-card border border-border text-[13px] leading-relaxed w-60;
+}
+
+.catbot-avatar {
+  @apply w-12 h-12 bg-primary rounded-full flex items-center justify-center text-2xl shadow-lg cursor-pointer transition-transform hover:scale-110;
+}
+
+.theme-bg-primary {
+  background: var(--bg-primary);
+}
+
+.theme-card-bg {
+  background: var(--card-bg);
+}
+
+.theme-text-primary {
+  color: var(--text-primary);
+}
+
+.theme-text-secondary {
+  color: var(--text-secondary);
+}
+
+.theme-border {
+  border-color: var(--border-color);
+}
+
+.theme-hover-item {
+  color: var(--text-secondary);
+}
+
+.theme-hover-item:hover {
+  background: var(--hover-bg);
+  color: var(--hover-text);
+}
+
+.job-title {
+  color: var(--text-primary);
+}
+
+.salary-text,
+.salary-tag {
+  color: var(--text-primary);
+}
+
+.salary-tag {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+}
+
+.info-box {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+}
+
+.button-bg {
+  background: var(--button-bg);
+}
+
+.section-divider {
+  border-top: 1px solid var(--divider-line);
+}
+
+.divider-line {
+  border: 1px solid var(--divider-line);
+}
+
+.scroll-divider {
+  border-left: 1px solid var(--divider-line);
+  border-right: 1px solid var(--divider-line);
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+@media (max-width: 640px) {
+  .catbot-bubble {
+    width: min(92vw, 340px);
+  }
+}
+

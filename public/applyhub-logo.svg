@@ -1,0 +1,30 @@
+<svg viewBox="0 0 420 96" xmlns="http://www.w3.org/2000/svg" fill="none" role="img" aria-label="ApplyHub.me">
+  <defs>
+    <linearGradient id="brandBlue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2563EB"/>
+      <stop offset="100%" stop-color="#0EA5E9"/>
+    </linearGradient>
+    <linearGradient id="brandGreen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#22C55E"/>
+      <stop offset="100%" stop-color="#16A34A"/>
+    </linearGradient>
+  </defs>
+
+  <g transform="translate(10 10)">
+    <rect x="0" y="6" width="50" height="58" rx="10" stroke="url(#brandBlue)" stroke-width="3" fill="none"/>
+    <path d="M14 22h22M14 34h22M14 46h14" stroke="#2563EB" stroke-width="3" stroke-linecap="round"/>
+    <path d="M17 49l6 6 10-12" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+
+  <g transform="translate(34 10)">
+    <path d="M28 12c-9.4 0-17 7.6-17 17 0 11.2 17 26 17 26s17-14.8 17-26c0-9.4-7.6-17-17-17Z" fill="url(#brandGreen)"/>
+    <circle cx="28" cy="29" r="10" fill="#FFFFFF" opacity="0.96"/>
+    <path d="M23 29l4 4 8-9" stroke="#16A34A" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+
+  <text x="102" y="56" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="800" letter-spacing="-1.1">
+    <tspan fill="url(#brandBlue)">Apply</tspan>
+    <tspan fill="url(#brandGreen)">Hub</tspan>
+    <tspan fill="#94A3B8" font-size="28" font-weight="700">.me</tspan>
+  </text>
+</svg>
