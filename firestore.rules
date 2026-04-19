@@ -1,0 +1,108 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: users
+    // Fields: uid, email, fullName, role (user/client/admin), skills, interests, 
+    //         applicationLimit, applicationsThisWeek, lastApplicationDate, 
+    //         subscriptionTier, subscriptionExpiresAt, jobCredits, bio, title, 
+    //         experienceYears, hourlyRate
+    //
+    // Collection: jobs
+    // Fields: title, company, description, requirements, salaryRange, weeklyHours, 
+    //         duration, workType, location, postedAt, expiresAt, isFeatured, 
+    //         clientUid, status
+    //
+    // Collection: applications
+    // Fields: jobUid, userUid, coverLetter, expectedSalary, experience, 
+    //         availability, startDate, status, createdAt
+    //
+    // Collection: payments
+    // Fields: userUid, amount, currency, method, status, proofUrl, type, planId, timestamp
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+        ((exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin') || 
+         request.auth.token.email == "sufyanrasheed12@gmail.com");
+    }
+
+    function isClient() {
+      return isAuthenticated() && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'client';
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    function isValidEmail(email) {
+      return email is string && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    // ===============================================================
+    // Collection Rules
+    // ===============================================================
+
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.auth.uid == userId && 
+                    hasOnlyAllowedFields(['uid', 'email', 'fullName', 'phone', 'role', 'skills', 'interests', 'applicationLimit', 'applicationsThisWeek', 'lastApplicationDate', 'subscriptionTier', 'subscriptionExpiresAt', 'jobCredits', 'bio', 'title', 'experienceYears', 'hourlyRate', 'createdAt']) &&
+                    request.resource.data.role in ['user', 'client'] &&
+                    request.resource.data.email == request.auth.token.email;
+      allow update: if isAdmin() || (isOwner(userId) && 
+                    (!('role' in request.resource.data) || request.resource.data.role == resource.data.role) &&
+                    (!('subscriptionTier' in request.resource.data) || request.resource.data.subscriptionTier == resource.data.subscriptionTier) &&
+                    (!('jobCredits' in request.resource.data) || request.resource.data.jobCredits == resource.data.jobCredits));
+    }
+
+    match /jobs/{jobId} {
+      allow read: if true; // Publicly readable for browsing
+      allow create: if isAdmin() || (isClient() && request.resource.data.clientUid == request.auth.uid);
+      allow update: if isAdmin() || (isClient() && resource.data.clientUid == request.auth.uid);
+      allow delete: if isAdmin();
+    }
+
+    match /applications/{appId} {
+      allow read: if isAuthenticated() && (request.auth.uid == resource.data.userUid || isAdmin() || (isClient() && get(/databases/$(database)/documents/jobs/$(resource.data.jobUid)).data.clientUid == request.auth.uid));
+      allow create: if isAuthenticated() && request.resource.data.userUid == request.auth.uid;
+      allow update: if isAdmin() || (isClient() && get(/databases/$(database)/documents/jobs/$(resource.data.jobUid)).data.clientUid == request.auth.uid);
+    }
+
+    match /payments/{paymentId} {
+      allow read: if isAdmin() || (isAuthenticated() && request.auth.uid == resource.data.userUid);
+      allow create: if isAuthenticated() && request.resource.data.userUid == request.auth.uid && request.resource.data.status == 'Pending';
+      allow update: if isAdmin();
+    }
+
+    match /paymentMethods/{methodId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if isAuthenticated();
+      allow update, delete: if isAdmin() || (isAuthenticated() && request.auth.uid == resource.data.userUid);
+    }
+  }
+}
